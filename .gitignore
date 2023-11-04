@@ -32,6 +32,8 @@
 .DS_Store?
 ._*
 __pycache__/
+venv
+.venv
 .Spotlight-V100
 .Trashes
 ehthumbs.db

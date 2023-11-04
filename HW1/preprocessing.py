@@ -55,4 +55,4 @@ def batch_generator(inputs, targets, batch_size):
         #slice into arrays with len = minibatch_size
         batch = combined[i: i + batch_size]
         data_batch, target_batch = zip(*batch)
-        yield data_batch, target_batch
+        yield np.array(data_batch), np.array(target_batch)

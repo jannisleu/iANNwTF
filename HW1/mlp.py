@@ -19,6 +19,27 @@ class MLP():
     def forward(self, input):
       output = input
       for layer in self.layers:
+          layer.prev_layer_output = output
           output = layer.forward(output)
       return output
+    
+    def backwards(self, grad):
+        for l in reversed(self.layers):
+            if l == self.layers[0]:
+                grad = l.activation.backwards(l.post_activation, grad)
+                l.weights_backwards(l.prev_layer_output, grad)
+            else:
+                if l == self.layers[-1]:
+                    l.weights_backwards(l.prev_layer_output, grad)
+                    grad = np.dot(l.weights, grad.T)
+                else:
+                    grad = l.activation.backwards(l.post_activation, grad)
+                    l.weights_backwards(l.prev_layer_output, grad)
+                    grad = np.dot(l.weights, grad.T)
+
+    def update(self, learning_rate):
+        for l in self.layers:
+            l.update(learning_rate)
+            
+    
     

@@ -1,4 +1,3 @@
-from typing import Any
 import numpy as np
 
 
@@ -13,6 +12,12 @@ class Sigmoid():
             input (array): inputs of shape (minibatchsize, num_units)
         """
         return 1 / (1 + np.exp(-inputs))
+    
+    def backwards(self, postactivation, gradients):
+        # Sigmoid(preactivation) = postactivation
+        grad = postactivation * (1 - postactivation)
+        return grad * gradients.T
+
     
     def __repr__(self):
         return f'Sigmoid'

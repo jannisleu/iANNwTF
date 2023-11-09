@@ -8,34 +8,24 @@ class Layer():
         self.input_size = input_size
         self.weights = np.random.normal(loc = 0, scale = 0.2, size = (input_size, num_units))
         self.bias = np.zeros((1, num_units))
+        self.prev_layer_output = None
 
     def forward(self, input):
+        self.pre_activation = np.dot(input, self.weights) + self.bias
+        self.post_activation = self.activation(self.pre_activation)
+        return self.post_activation
 
-        pre_activation = np.dot(input, self.weights) + self.bias
-        post_activation = self.activation(pre_activation)
-        return post_activation
-    #batchsize, inputsize
-    #batchsize, num_units
+    def weights_backwards(self, output, gradients):
+        self.d_weights = np.dot(output.T, gradients)
+        self.d_bias = np.mean(gradients, axis=0)
+    
+    def activation_backwards(self, output, dhidden):
+        return self.activation.backwards(output, dhidden)
+    
+    def update(self, learning_rate):
+        self.weights -= learning_rate * self.d_weights
+        self.bias -= learning_rate * self.d_bias 
+    
 
     def __repr__(self):
        return f"Layer(num_units={self.num_units}, input_size={self.input_size}, activation={self.activation})"
-
-inp =[
-    [1,2,3,4],
-    [1,2,3,4],
-    [1,2,3,4]
-    ] #3x4
-
-w = [
-    [0.1, 0.2],
-    [0.1, 0.2],
-    [0.1, 0.2],
-    [0.1, 0.2]
-] #4x2
-
-pre = [
-    [1, 2],
-    [1, 2],
-    [1, 2]
-] #3x2
-

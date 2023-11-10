@@ -24,6 +24,11 @@ class MLP():
       return output
     
     def backwards(self, grad):
+        """ Backpropagation for all layers of the MLP
+
+        Args:
+            grad (np.array): gradient of the Softmax loss
+        """
         for l in reversed(self.layers):
             if l == self.layers[0]:
                 grad = l.activation.backwards(l.post_activation, grad)
@@ -37,9 +42,18 @@ class MLP():
                     l.weights_backwards(l.prev_layer_output, grad)
                     grad = np.dot(l.weights, grad.T)
 
-    def update(self, learning_rate):
+    def update(self, learning_rate: float):
+        """ parameter update for the whole MLP
+
+        Args:
+            learning_rate (float): learning rate for parameter update
+        """
         for l in self.layers:
             l.update(learning_rate)
+
+    def predict(self, x):
+        out = self.forward(x)
+        return np.argmax(out, axis=1)
             
     
     

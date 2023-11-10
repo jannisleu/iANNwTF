@@ -19,9 +19,6 @@ class Layer():
         self.d_weights = np.dot(output.T, gradients)
         self.d_bias = np.mean(gradients, axis=0)
     
-    def activation_backwards(self, output, dhidden):
-        return self.activation.backwards(output, dhidden)
-    
     def update(self, learning_rate):
         self.weights -= learning_rate * self.d_weights
         self.bias -= learning_rate * self.d_bias 
